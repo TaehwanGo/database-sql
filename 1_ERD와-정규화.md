@@ -82,3 +82,46 @@
 ## 아이디를 연이은 숫자로 할 때 단점
 
 - 아이디가 연이은 숫자이면 회사의 정보가 노출될 수 있다(개수를 알 수 있음)
+
+## 일대일, 일대다, 다대다 관계(ERD)
+
+- 일대다
+  - 사원 : 전화번호 = 1 : N
+- 다대다
+  - 사원 : 프로젝트 = M : N
+
+### 다대다인 경우 중간 테이블이 필요하다
+
+#### 사원-프로젝트 테이블
+
+| 사원 아이디(외래키) | 프로젝트 아이디(외래키) |
+| ------------------- | ----------------------- |
+| 1                   | 1                       |
+| 1                   | 2                       |
+| 2                   | 2                       |
+| 3                   | 1                       |
+| 4                   | 1                       |
+| 4                   | 2                       |
+| 5                   | 1                       |
+| 6                   | 1                       |
+
+### 일대일: 자주 사용하지 않는 정보는 다른 테이블로 분리할 수도 있다
+
+- 컬럼이 너무 많아지면 분리할 수 있다
+- 합쳐서 쓰는 것이 더 효율적일 수도 있다
+
+### ERD 그릴 때
+
+- https://www.erdcloud.com/
+
+### 정규화 예시(슬랙 따라 만들기)
+
+- https://www.erdcloud.com/d/QqKNELMS6e3AB3xia
+- users, workspaces, channels, channel_members, workspace_members, channel_messages, dm_messages
+
+- users : dm_messages = 1 : N
+- users : workspaces = M : N
+  - 참가자입장에선 M : N
+  - workspace_members => users, workspaces의 중간 테이블
+- users : workspace = 1 : N
+  - owner인 경우 1 : N
