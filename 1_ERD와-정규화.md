@@ -125,3 +125,8 @@
   - workspace_members => users, workspaces의 중간 테이블
 - users : workspace = 1 : N
   - owner인 경우 1 : N
+
+## soft delete vs hard delete
+
+- soft delete: 삭제 플래그를 넣어서 삭제한 것처럼 보이게 하는 것
+- hard delete: 실제로 삭제하는 것
