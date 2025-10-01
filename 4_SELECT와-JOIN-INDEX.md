@@ -46,3 +46,22 @@ select * from zerocho.employee where team = '개발팀' or (team = '기획팀' a
 ```
 
 - or가 and보다 우선순위가 낮음
+
+## 함수와 AS, ORDER BY
+
+```sql
+select count(*) from zerocho.employee where team = '개발팀';
+-- select avg(salary) from zerocho.employee where team = '개발팀';
+-- select avg(salary) as '총액' from zerocho.employee where team = '개발팀';
+select avg(salary) as '총액' from zerocho.employee em where team = '개발팀'; -- 별칭(AS) 사용 가능, 테이블명도 가능
+select avg(salary) as '총액', 5 as '컬럼' from zerocho.employee em where team = '개발팀';
+select sum(salary) from zerocho.employee where team = '개발팀';
+select max(salary) from zerocho.employee where team = '개발팀';
+select min(salary) from zerocho.employee where team = '개발팀';
+```
+
+```sql
+select * from zerocho.employee where team = '개발팀' order by salary; -- 오름차순
+select * from zerocho.employee where team = '개발팀' order by salary desc; -- 내림차순
+select * from zerocho.employee where team = '개발팀' order by salary desc, created_at; -- 여러개 정렬(1순위: salary, 2순위: created_at)
+```
