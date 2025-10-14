@@ -65,3 +65,26 @@ select * from zerocho.employee where team = '개발팀' order by salary; -- 오�
 select * from zerocho.employee where team = '개발팀' order by salary desc; -- 내림차순
 select * from zerocho.employee where team = '개발팀' order by salary desc, created_at; -- 여러개 정렬(1순위: salary, 2순위: created_at)
 ```
+
+## 페이지네이션에 자주 쓰이는 LIMIT, OFFSET
+
+### OFFSET 방식의 페이지네이션
+
+```sql
+select * from zerocho.employee where team = '개발팀' order by salary desc limit 2; -- 2개만 가져와
+select * from zerocho.employee where team = '개발팀' order by salary desc limit 2 offset 2; -- 2개 건너뛰고 2개 가져와
+```
+
+- 장점: 구현이 간단하다
+- 단점
+  - 5개를 가져와야 되는데 페이지가 넘어갈 수록 OFFSET이 커져서 느려짐
+  - 중간에 데이터가 삭제되면 건너뛰는 데이터가 생김(soft delete로 해결 가능)
+
+### 커서 방식의 페이지네이션
+
+- 데이터 예시
+  - 게시글의 아이디: 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+
+```sql
+select * from zerocho.employee where team = '개발팀' and id < 9; -- id가 9보다 작은 것들 중에서
+```
