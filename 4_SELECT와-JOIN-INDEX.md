@@ -121,3 +121,47 @@ group by team having team = '개발팀' or team = '기획팀';
 select avg(salary) as '평균급여', role_id from zerocho.employee
 group by role_id;
 ```
+
+## INNER JOIN
+
+- employee 테이블과 role 테이블을 조인
+
+### INNER JOIN
+
+- 두 테이블에서 조건에 맞는 데이터만 가져옴
+
+```sql
+select * from zerocho.employee join zerocho.role; -- 모든 조합(CROSS JOIN) 사람 11명, 역할 5개 = 55개
+select * from zerocho.employee join zerocho.role on zerocho.employee.role_id = zerocho.role.id; -- INNER JOIN
+```
+
+- group by는 having
+- limit은 offset
+- join은 on
+
+```sql
+select employee.id, e.name as '사원명', email, team, r.name as '직책명', min_salary
+from zerocho.employee e join zerocho.role r
+on zerocho.employee.role_id = zerocho.role.id;
+
+select e.id, e.name as '사원명', email, team, r.name as '직책명', min_salary
+from zerocho.employee e join zerocho.role r
+on e.role_id = r.id;
+```
+
+- Column 'id' in field list is ambiguous
+  - id 컬럼이 employee, role 테이블에 모두 존재하기 때문에 어느 테이블의 id인지 명확하지 않음
+
+### OUTER JOIN
+
+- LEFT JOIN: 왼쪽 테이블을 기준으로 조인
+
+```sql
+select * from zerocho.employee left join zerocho.role on zerocho.employee.role_id = zerocho.role.id;
+```
+
+- RIGHT JOIN: 오른쪽 테이블을 기준으로 조인
+
+```sql
+select * from zerocho.employee right join zerocho.role on zerocho.employee.role_id = zerocho.role.id;
+```
