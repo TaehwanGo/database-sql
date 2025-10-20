@@ -88,3 +88,36 @@ select * from zerocho.employee where team = '개발팀' order by salary desc lim
 ```sql
 select * from zerocho.employee where team = '개발팀' and id < 9; -- id가 9보다 작은 것들 중에서
 ```
+
+## 통계를 낼 때 자주 쓰는 GROUP BY, HAVING
+
+### GROUP BY
+
+- 특정 컬럼을 기준으로 그룹화할 때 사용
+
+```sql
+select team, count(*) as '인원수' from zerocho.employee group by team;
+select team, avg(salary) as '평균급여' from zerocho.employee group by team;
+```
+
+### HAVING
+
+- GROUP BY한 결과에 조건을 걸 때 사용
+
+```sql
+select avg(salary), team from zerocho.employee
+group by team having team = '개발팀' or team = '기획팀';
+
+select avg(salary), team from zerocho.employee where salary > 5000
+group by team;
+
+select avg(salary), team from zerocho.employee where salary > 5000
+group by team having team = '개발팀' or team = '기획팀';
+```
+
+- WHERE는 그룹화 전에 조건을 걸고, HAVING은 그룹화 후에 조건을 건다는 차이점이 있음
+
+```sql
+select avg(salary) as '평균급여', role_id from zerocho.employee
+group by role_id;
+```
