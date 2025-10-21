@@ -165,3 +165,36 @@ select * from zerocho.employee left join zerocho.role on zerocho.employee.role_i
 ```sql
 select * from zerocho.employee right join zerocho.role on zerocho.employee.role_id = zerocho.role.id;
 ```
+
+## LEFT, RIGHT JOIN
+
+- INNER JOIN: 둘을 합쳤을 때 null이 하나라도 있으면 제외(서로간의 관계를 맺고 있어야 포함)
+- OUTER JOIN: null이 있어도 포함(서로간의 관계를 맺고 있지 않아도 포함)
+  - LEFT JOIN: 왼쪽 테이블 기준
+  - RIGHT JOIN: 오른쪽 테이블 기준
+
+```sql
+SELECT * FROM zerocho.employee e
+LEFT JOIN zerocho.employee_project ep
+ON e.id = ep.employee_fk;
+```
+
+- employee 테이블에 있는 모든 데이터가 나오고, employee_project에 매칭되는 데이터가 없으면 null로 표시됨
+
+```sql
+SELECT * FROM zerocho.employee e
+RIGHT JOIN zerocho.employee_project ep
+ON e.id = ep.employee_fk;
+```
+
+- employee_project 테이블에 있는 모든 데이터가 나오고, employee에 매칭되는 데이터가 없으면 null로 표시됨
+
+```sql
+SELECT * FROM (zerocho.employee e
+LEFT JOIN zerocho.employee_project ep
+ON e.id = ep.employee_fk)
+LEFT JOIN zerocho.project p
+ON ep.project_fk = p.id;
+```
+
+- 테이블 JOIN 이후 SELECT가 실행됨
