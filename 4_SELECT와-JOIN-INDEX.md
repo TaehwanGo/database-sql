@@ -198,3 +198,32 @@ ON ep.project_fk = p.id;
 ```
 
 - 테이블 JOIN 이후 SELECT가 실행됨
+
+## FULL OUTER JOIN, CROSS JOIN
+
+### FULL OUTER JOIN
+
+```sql
+USE zerocho;
+(SELECT * FROM employee e LEFT JOIN employee_project ep ON e.id = ep.employee_fk
+LEFT JOIN project p ON ep.project_fk = p.id)
+UNION
+(SELECT * FROM employee e RIGHT JOIN employee_project ep ON e.id = ep.employee_fk
+RIGHT JOIN project p ON ep.project_fk = p.id);
+```
+
+### CROSS JOIN(CARTESIAN JOIN)
+
+- 두 테이블의 모든 조합을 보여줌
+
+```sql
+SELECT * FROM zerocho.employee JOIN zerocho.role;
+
+SELECT * FROM zerocho.employee, zerocho.project;
+
+SELECT * FROM zerocho.employee CROSS JOIN zerocho.role;
+```
+
+- ON을 빼먹으면 CROSS JOIN이 됨
+- 또는 FROM 뒤에 콤마(,)로 구분하여 여러 테이블을 적으면 CROSS JOIN이 됨
+- CROSS JOIN은 조인 조건이 없기 때문에 조인되는 두 테이블의 모든 조합을 결과로 반환함
