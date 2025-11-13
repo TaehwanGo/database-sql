@@ -227,3 +227,82 @@ SELECT * FROM zerocho.employee CROSS JOIN zerocho.role;
 - ON을 빼먹으면 CROSS JOIN이 됨
 - 또는 FROM 뒤에 콤마(,)로 구분하여 여러 테이블을 적으면 CROSS JOIN이 됨
 - CROSS JOIN은 조인 조건이 없기 때문에 조인되는 두 테이블의 모든 조합을 결과로 반환함
+
+## 검색을 빠르게 해주는 INDEX와 EXPLAIN
+
+### INDEX
+
+- employee 테이블 기준 인덱스가 있는 곳
+
+  - PRIMARY KEY: id
+  - UNIQUE INDEX: email
+  - INDEX: role_id (foreign key)
+
+- 인덱스가 필요한 이유: 검색 속도 향상
+- 인덱스가 없는 경우: 테이블의 모든 데이터를 처음부터 끝까지 검색(Full Table Scan)
+- 인덱스가 있는 경우: 인덱스를 통해 검색 대상이 되는 데이터의 위치를 빠르게 찾음
+
+- 모든 컬럼에 인덱스를 걸면 좋은거 아닌가?
+  - 용량 문제: 인덱스도 데이터베이스에 저장되기 때문에 인덱스가 많아지면 그만큼 저장 공간을 더 차지함
+  - 성능 문제: 인덱스가 많아지면 데이터 삽입, 수정, 삭제 시 인덱스도 함께 갱신되어야 하기 때문에 오히려 성능이 저하될 수 있음
+- 인덱스는 자주 검색되는 컬럼이나, WHERE 절에 자주 사용되는 컬럼에 주로 걸어주는 것이 좋음
+- 인덱스가 있는 컬럼으로 정렬하면 빠름
+- 유니크 컬럼은 기존이랑 겹치는지 확인하기 때문에 인덱스가 걸려있음
+
+#### 인덱스를 만드는 명령어
+
+```sql
+ALTER TABLE employee ADD INDEX idx_team (team);
+```
+
+- team 컬럼에 idx_team이라는 이름으로 인덱스 생성
+
+#### 인덱스를 삭제하는 명령어
+
+```sql
+ALTER TABLE employee DROP INDEX idx_team;
+```
+
+- team 컬럼에 걸려있는 idx_team 인덱스 삭제
+
+#### 인덱스 순위
+
+- 1순위 조건은 꼭 where절에 포함되어야 함
+
+### EXPLAIN
+
+- 쿼리 실행 계획을 보여주는 명령어
+- 인덱스가 사용되는지, 어떤 방식으로 조인이 이루어지는지 등을 확인할 수 있음
+
+```sql
+EXPLAIN SELECT * FROM zerocho.employee WHERE team = '개발팀';
+```
+
+- type: ALL -> FULL TABLE SCAN
+
+```sql
+EXPLAIN SELECT * FROM zerocho.employee WHERE id = 6;
+```
+
+- type: const -> PRIMARY KEY나 UNIQUE INDEX로 검색할 때 사용됨
+
+## 퀴즈
+
+- `WHERE` 절과 `HAVING` 절의 주요 차이점은 무엇일까요?
+
+  - `WHERE`는 개별 행 필터링, `HAVING`은 그룹 필터링에 사용됩니다.
+
+- 두 테이블 조인 시, 왼쪽 테이블의 모든 행을 포함하고 일치하는 오른쪽 행만 가져오되, 불일치 시 NULL을 채우는 방식은 무엇일까요?
+
+  - LEFT JOIN
+
+- SQL 쿼리 결과에서 열이나 테이블 이름을 임시적으로 다른 이름으로 지정할 때 사용하는 키워드는 무엇일까요?
+
+  - AS
+
+- 데이터 검색 및 정렬 속도를 빠르게 하지만, 저장 공간을 더 차지하고 데이터가 변경될 때 추가 작업이 필요한 데이터베이스 요소는 무엇일까요?
+
+  - INDEX
+
+- `LIMIT`와 `OFFSET`을 사용한 기본적인 페이지네이션 방식의 단점은 무엇일까요?
+  - OFFSET 방식은 데이터를 가져오는 시점에 새로운 데이터가 추가되거나 기존 데이터가 삭제되면 다음 페이지의 내용이 밀리거나 빠지는 등 사용자에게 혼란을 줄 수 있는 문제가 있어요.
